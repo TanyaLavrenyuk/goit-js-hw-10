@@ -4,6 +4,14 @@ import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
 const startBtn = document.querySelector('button[data-start]');
+const dateInput = document.querySelector('#datetime-picker');
+
+const daysValue = document.querySelector('[data-days]');
+const hoursValue = document.querySelector('[data-hours]');
+const minutesValue = document.querySelector('[data-minutes]');
+const secondsValue = document.querySelector('[data-seconds]');
+
+startBtn.disabled = true;
 let userSelectedDate = null;
 
 const options = {
@@ -31,18 +39,16 @@ flatpickr('#datetime-picker', options);
 
 startBtn.addEventListener('click', () => {
   startBtn.disabled = true;
-  document.querySelector('#datetime-picker').disabled = true;
+  dateInput.disabled = true;
 
   const timerId = setInterval(() => {
     const now = new Date();
-
     const diff = userSelectedDate - now;
 
     if (diff <= 0) {
       clearInterval(timerId);
-      document.querySelector('#datetime-picker').disabled = false;
-      console.log('Таймер зупинено!');
       updateTimerInterface({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+      dateInput.disabled = false;
       return;
     }
 
@@ -69,11 +75,6 @@ function convertMs(ms) {
 
   return { days, hours, minutes, seconds };
 }
-
-const daysValue = document.querySelector('[data-days]');
-const hoursValue = document.querySelector('[data-hours]');
-const minutesValue = document.querySelector('[data-minutes]');
-const secondsValue = document.querySelector('[data-seconds]');
 
 function updateTimerInterface({ days, hours, minutes, seconds }) {
   daysValue.textContent = addLeadingZero(days);
